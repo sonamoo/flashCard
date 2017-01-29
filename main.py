@@ -9,6 +9,10 @@ from models.Card import Card
 app = Flask(__name__)
 
 
+# Fake courses
+courses = [{'id':1, 'name':'CS-151', 'description':'This is my first class at UIC'},
+           {'id':2, 'name':'CS-141', 'description': 'Computer Science Program Design II'}]
+
 @app.route('/')
 def hello():
     return 'Hello World!'
@@ -17,18 +21,26 @@ def hello():
 # Render courses page.
 @app.route('/courses')
 def my_courses():
-    courses = db.GqlQuery("SELECT * FROM Course ORDER BY created")
+
     return render_template('myCourses.html', courses=courses)
 
 
 # Edit course's name or description.
 @app.route('/courses/<int:course_id>/edit')
-def edit_course():
-    aCourse = db.GqlQuery("SELECT ")
+def edit_course(course_id):
 
+    return 'edit here'
+
+# Delete a course.
+@app.route('/courses/<int:course_id>/delete')
+def delete_course():
+    return 'Are you sure you want to delete this course?'
 
 # See the course's cards.
 @app.route('/courses/<int:course_id>')
+def show_cards(course_id):
+
+    return
 
 
 
