@@ -1,0 +1,5 @@
+from google.appengine.ext import db
+
+class Course(db.Model):
+    name = db.StringListProperty(required=True)
+
