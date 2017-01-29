@@ -1,6 +1,10 @@
 import logging
 
+from google.appengine.ext import db
 from flask import Flask, render_template, request
+
+from models.Course import Course
+from models.Card import Card
 
 app = Flask(__name__)
 
@@ -13,22 +17,20 @@ def hello():
 # Render courses page.
 @app.route('/courses')
 def my_courses():
-    return render_template('myCourses.html')
+    courses = db.GqlQuery("SELECT * FROM Course ORDER BY created")
+    return render_template('myCourses.html', courses=courses)
 
-"""
-@app.route('/submitted', methods=['POST'])
-def submitted_form():
-    name = request.form['name']
-    email = request.form['email']
-    site = request.form['site_url']
-    comments = request.form['comments']
-    return render_template(
-        'submitted_form.html',
-        name=name,
-        email=email,
-        site=site,
-        comments=comments)
-"""
+
+# Edit course's name or description.
+@app.route('/courses/<int:course_id>/edit')
+def edit_course():
+    aCourse = db.GqlQuery("SELECT ")
+
+
+# See the course's cards.
+@app.route('/courses/<int:course_id>')
+
+
 
 @app.errorhandler(500)
 def server_error(e):
