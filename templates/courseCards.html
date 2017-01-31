@@ -8,15 +8,20 @@
  <body>
     <div class="container">
         <h1>Cards</h1>
-        {% for card in cards %}
-            <div>
-                {{card.name}}
-                <br>
-                {{card.description}}
-                <br>
-                <br>
-            </div>
-        {% endfor %}
+        {% if cards %}
+            {% for card in cards %}
+                <div>
+                    {{card.name}}
+                    <br>
+                    {{card.description}}
+                    <br>
+                    <br>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>You don't have any saved flash cards for the {{course}}</p>
+        {% endif %}
+        <a href="{{url_for('new_card', course_name=course_name)}}">New Card</a>
     </div>
 
 

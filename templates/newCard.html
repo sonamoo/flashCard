@@ -1,18 +1,22 @@
 <html>
  <head>
-     <title>My Courses</title>
-     <link rel="stylesheet" type="text/css" href="/static/style.css"
+     <title>Add a Card</title>
+     <link rel="stylesheet" type="text/css" href="/static/style.css">
      <!-- Latest compiled and minified CSS -->
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
  </head>
  <body>
     <div class="container">
-        <h1>hello world!!!</h1>
-        {% for course in courses %}
-            <div>
-                <a href="{{url_for('show_cards', course_name=course.name)}}">{{course.name}}</a>
-            </div>
-        {% endfor %}
+        <h1>Add a Card for {{course_name}}</h1>
+        <a href="{{url_for('my_courses')}}">View my Courses</a>
+        <form method="post" action="{{ url_for('new_card')}}">
+            <label for="name">Name:</label>
+            <input type="text" name="name"><br />
+            <label for="description">Course Description:</label>
+            <textarea name="description"></textarea><br />
+
+            <input type="submit">
+        </form>
     </div>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
  </body>
