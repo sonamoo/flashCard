@@ -3,15 +3,24 @@ import logging
 from google.appengine.ext import db
 from flask import Flask, render_template, request, redirect, url_for
 
+from flask import session as login_session
+import random, string
+
 from models.Course import Course
 from models.Card import Card
 
 app = Flask(__name__)
+app.secret_key = 'super_secret_key'
 
 
-@app.route('/')
-def hello():
-    return 'Hello World!'
+# Create  anti forgery state token
+@app.route('/login')
+def showLogin():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                    for x in xrange(32))
+    login_session['state'] = state
+    return render_template('login.html')
+
 
 
 @app.route('/courses/new', methods=['GET', 'POST'])

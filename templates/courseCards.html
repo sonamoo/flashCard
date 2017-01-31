@@ -3,11 +3,8 @@
 
     <h1>{{course.name}}</h1>
     {% if cards %}
-        <p>Here are you cards~</p>
-
         {% for card in cards %}
-            <p>{{card}}</p>
-            <div>
+            <div class="card">
                 {{card.name}}
                 <br>
                 {{card.description}}
