@@ -71,7 +71,7 @@ def delete_course(course_id):
 
 
 # Add a card.
-@app.route('/courses/<int:course_int>/new', methods=['GET', 'POST'])
+@app.route('/courses/<int:course_id>/new', methods=['GET', 'POST'])
 def new_card(course_id):
     if request.method == 'POST':
         name = request.form['name']
@@ -81,21 +81,11 @@ def new_card(course_id):
         if name and description:
             newCard = Card(name=name, description=description, course=course)
             newCard.put()
-            return redirect(url_for('show_cards', course=course))
+            return redirect(url_for('show_cards', course_id=course_id))
     else:
+        key = db.Key.from_path('Course', course_id)
+        course = db.get(key)
         return render_template('newCard.html', course=course)
-
-    """
-    if request.method == 'POST':
-        name = request.form['name']
-        description = request.form['description']
-        course = course_name
-        if name and description:
-            newCard = Card(name=name, description=description, course=course_name)
-            return redirect(url_for('show_cards'))
-    """
-
-
 
 
 @app.errorhandler(500)
