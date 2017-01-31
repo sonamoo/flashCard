@@ -9,16 +9,6 @@ from models.Card import Card
 app = Flask(__name__)
 
 
-# Fake courses
-
-# Fake cards
-"""
-cards = [{'id': 1, 'name': 'Algorithm', 'courseId': 1, 'description': 'a process or set of rules to be followed in calculations or other problem-solving operations, especially by a computer'},
-         {'id': 2, 'name': 'Data Structure', 'courseId': 1, 'description': 'In computer science, a data structure is a particular way of organizing data in a computer so that it can be used efficiently.'},
-         {'id': 3, 'name': 'CRUD', 'courseId': 2, 'description': 'In computer programming, create, read, update and delete (as an acronym CRUD)'},
-         {'id': 4, 'name': 'AJAX', 'courseId': 2, 'description': 'AJAX stands for Asynchronous JavaScript and XML. In a nutshell, it is the use of the XMLHttpRequest object to communicate with server-side scripts. It can send as well as receive information in a variety of formats, including JSON, XML, HTML, and even text files.'}]
-"""
-
 @app.route('/')
 def hello():
     return 'Hello World!'
@@ -51,7 +41,6 @@ def show_cards(course_id):
     course = db.get(key)
     cards = course.cards
     if cards:
-        print type(cards)
         return render_template('courseCards.html', cards=cards, course=course)
     else:
         return render_template('courseCards.html', course=course)
@@ -72,27 +61,65 @@ def edit_course(course_id):
 
 
 # Delete a course.
-@app.route('/courses/<int:course_id>/delete')
+@app.route('/courses/<int:course_id>/delete', methods=['GET', 'POST'])
 def delete_course(course_id):
-    return render_template('deleteCourse.html')
+    key = db.Key.from_path('Course', course_id)
+    course = db.get(key)
+    if request.method == 'POST':
+        course.delete()
+        return redirect(url_for('my_courses'))
+    else:
+        return render_template('deleteCourse.html', course=course)
 
 
 # Add a card.
 @app.route('/courses/<int:course_id>/new', methods=['GET', 'POST'])
 def new_card(course_id):
+    key = db.Key.from_path('Course', course_id)
+    course = db.get(key)
     if request.method == 'POST':
         name = request.form['name']
         description = request.form['description']
         key = db.Key.from_path('Course', course_id)
         course = db.get(key)
         if name and description:
-            newCard = Card(name=name, description=description, course=course)
-            newCard.put()
+            card = Card(name=name, description=description, course=course)
+            card.put()
             return redirect(url_for('show_cards', course_id=course_id))
     else:
-        key = db.Key.from_path('Course', course_id)
-        course = db.get(key)
         return render_template('newCard.html', course=course)
+
+
+# Edit a card
+@app.route('/courses/<int:course_id>/<int:card_id>/edit', methods=['GET', 'POST'])
+def edit_card(course_id, card_id):
+    course_key = db.Key.from_path('Course', course_id)
+    card_key = db.Key.from_path('Card', card_id)
+    course = db.get(course_key)
+    card = db.get(card_key)
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        if name and description:
+            card = Card(name=name, description=description, course=course)
+            card.put()
+            return redirect(url_for('show_cards', course=course))
+    else:
+        return render_template('editCard.html', course=course, card=card)
+
+
+# Delete a card
+@app.route('/courses/<int:course_id>/delete', methods=['GET', 'POST'])
+def delete_card(course_id, card_id):
+    course_key = db.Key.from_path('Course', course_id)
+    card_key = db.Key.from_path('Card', card_id)
+    course = db.get(course_key)
+    card = db.get(card_key)
+    if request.method == 'POST':
+        card.delete()
+        return redirect(url_for('show_cards', course_id=course_id, card_id=card_id))
+    else:
+        return render_template('deleteCard.html', course=course, card=card)
 
 
 @app.errorhandler(500)

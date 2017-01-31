@@ -12,8 +12,10 @@
                 <br>
                 {{card.description}}
                 <br>
-
                 <br>
+                <a href="{{url_for('edit_card', course_id=course.key().id(), card_id=card.key().id())}}">Edit</a>
+                /
+                <a href="{{url_for('delete_card', course_id=course.key().id(), card_id=card.key().id())}}">Delete</a>
             </div>
         {% endfor %}
     {% else %}

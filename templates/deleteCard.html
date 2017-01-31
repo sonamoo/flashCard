@@ -1,10 +1,10 @@
 {% extends "main.html" %}
 {% block content %}
-    <h1>Are you sure you want to delete {{course.name}}</h1>
-    <form method="post" action="{{ url_for('delete_course', course_id=course.key().id())}}">
+    <h1>Are you sure you want to delete {{card.name}}</h1>
+    <form method="post" action="{{ url_for('delete_card', course_id=course.key().id(), card_id=card.key().id())}}">
         <button type="submit" class="btn btn-default delete" id="submit" type="submit">
         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete</button>
-            <a href = '{{url_for('my_courses')}}'>
+            <a href = '{{url_for('show_cards', course_id=course.key().id(), card_id=card.key().id())}}'>
             <button class="btn btn-default delete">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</button>
         </a>
