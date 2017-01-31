@@ -1,2 +1,11 @@
 /* currently empty */
 
+.main {
+    max-width: 900px;
+    margin: 0 auto;
+}
+.courses {
+    min-height: 30px;
+    border:black solid 1px;
+    margin-bottom: 10px;
+}

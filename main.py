@@ -47,21 +47,28 @@ def my_courses():
 # See the course's cards.
 @app.route('/courses/<int:course_id>')
 def show_cards(course_id):
-    print "hi~~~~~~~~~~~~~~~~~~~~~"
     key = db.Key.from_path('Course', course_id)
     course = db.get(key)
-    print course
     cards = course.cards
     if cards:
+        print type(cards)
         return render_template('courseCards.html', cards=cards, course=course)
     else:
         return render_template('courseCards.html', course=course)
 
 
 # Edit course's name or description.
-@app.route('/courses/<int:course_id>/edit')
+@app.route('/courses/<int:course_id>/edit', methods=['GET', 'POST'])
 def edit_course(course_id):
-    return render_template('editCourse.html')
+    key = db.Key.from_path('Course', course_id)
+    course = db.get(key)
+    if request.method == 'POST':
+        course.name = request.form['name']
+        course.description = request.form['description']
+        course.put()
+        return redirect(url_for('show_cards', course_id=course_id))
+    else:
+        return render_template('editCourse.html', course=course)
 
 
 # Delete a course.

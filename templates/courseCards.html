@@ -1,30 +1,23 @@
-<html>
- <head>
-     <title>Cards</title>
-     <link rel="stylesheet" type="text/css" href="/static/style.css">
-     <!-- Latest compiled and minified CSS -->
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
- </head>
- <body>
-    <div class="container">
-        <h1>{{course.name}}</h1>
-        {% if cards %}
-            {% for card in cards %}
-                <div>
-                    {{card.name}}
-                    <br>
-                    {{card.description}}
-                    <br>
-                    <br>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p>You don't have any saved flash cards for the {{course.name}}</p>
-        {% endif %}
+{% extends "main.html" %}
+{% block content %}
 
-    </div>
+    <h1>{{course.name}}</h1>
+    {% if cards %}
+        <p>Here are you cards~</p>
 
+        {% for card in cards %}
+            <p>{{card}}</p>
+            <div>
+                {{card.name}}
+                <br>
+                {{card.description}}
+                <br>
 
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
- </body>
-</html>
+                <br>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You don't have any saved flash cards for the {{course.name}}</p>
+    {% endif %}
+
+{% endblock %}

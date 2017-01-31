@@ -6,8 +6,3 @@ class Card(db.Model):
     course = db.ReferenceProperty(Course, collection_name='cards')
     name = db.StringProperty(required=True)
     description = db.TextProperty(required=True)
-
-
-
-
-
