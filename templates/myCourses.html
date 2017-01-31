@@ -10,7 +10,7 @@
         <h1>hello world!!!</h1>
         {% for course in courses %}
             <div>
-                <a href="{{url_for('show_cards', course_name=course.name)}}">{{course.name}}</a>
+                <a href="{{url_for('show_cards', course_id=course.key().id())}}">{{course.name}}</a>
             </div>
         {% endfor %}
     </div>

@@ -7,7 +7,7 @@
  </head>
  <body>
     <div class="container">
-        <h1>Cards</h1>
+        <h1>{{course.name}}</h1>
         {% if cards %}
             {% for card in cards %}
                 <div>
@@ -19,9 +19,9 @@
                 </div>
             {% endfor %}
         {% else %}
-            <p>You don't have any saved flash cards for the {{course}}</p>
+            <p>You don't have any saved flash cards for the {{course.name}}</p>
         {% endif %}
-        <a href="{{url_for('new_card', course_name=course_name)}}">New Card</a>
+
     </div>
 
 

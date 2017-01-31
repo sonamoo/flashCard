@@ -45,13 +45,17 @@ def my_courses():
 
 
 # See the course's cards.
-@app.route('/courses/<string:course_name>')
-def show_cards(course_name):
-    cards = Card.gql("WHERE course = 'course_name'").get()
+@app.route('/courses/<int:course_id>')
+def show_cards(course_id):
+    print "hi~~~~~~~~~~~~~~~~~~~~~"
+    key = db.Key.from_path('Course', course_id)
+    course = db.get(key)
+    print course
+    cards = course.cards
     if cards:
-        return render_template('courseCards.html', cards=cards)
+        return render_template('courseCards.html', cards=cards, course=course)
     else:
-        return render_template('courseCards.html', course=course_name)
+        return render_template('courseCards.html', course=course)
 
 
 # Edit course's name or description.
@@ -67,9 +71,19 @@ def delete_course(course_id):
 
 
 # Add a card.
-@app.route('/courses/<string:course_name>/new')
-def new_card(course_name):
-    return render_template('newCard.html', course_name)
+@app.route('/courses/<int:course_int>/new', methods=['GET', 'POST'])
+def new_card(course_id):
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        key = db.Key.from_path('Course', course_id)
+        course = db.get(key)
+        if name and description:
+            newCard = Card(name=name, description=description, course=course)
+            newCard.put()
+            return redirect(url_for('show_cards', course=course))
+    else:
+        return render_template('newCard.html', course=course)
 
     """
     if request.method == 'POST':
