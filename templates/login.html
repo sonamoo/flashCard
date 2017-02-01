@@ -18,14 +18,15 @@
         data-approvalprompt="force">
         </span>
     </div>
-    <script>
+    <div id="result"></div>
+<script>
     function signInCallBack(authResult) {
         if (authResult['code']) {
             // If the user is authorized hide the sign-in button.
             $('#signInButton').attr('style', 'display:none');
             // Send the one-time-use code to the server, if the server responds, write a
             // 'login successful' message to the web page and then redirect back
-            // to the main restaurants page
+            // to the main restaurants page.
 
             $.ajax({
                 type: 'POST',
@@ -33,9 +34,11 @@
                 processData: false,
                 data: authResult['code'],
                 contentType: 'application/octet-stream; charset=utf-8',
+                // Success kicks in when we have 200 from the server.
                 success: function(result) {
-                    if (result) {
 
+                    if (result) {
+                        // Tell an user that login was successful.
                         $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
                         setTimeout(function () {
                             window.location.href = "/courses"
@@ -49,6 +52,6 @@
             });
         }
     }
-    </script>
+</script>
 </body>
 </html>
