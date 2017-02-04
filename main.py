@@ -29,14 +29,14 @@ CLIENT_ID = json.loads(
 APPLICATION_NAME = "Flash Card App"
 
 
-
 # Create  anti forgery state token
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
-    return render_template('login.html')
+    # return "The current session state is %s" % login_session['state']
+    return render_template('login.html', STATE=state)
 
 
 @app.route('/gconnect', methods=['POST'])
@@ -48,7 +48,6 @@ def gconnect():
         return response
     # Obtain authorization code
     code = request.data
-
     try:
         # Upgrade the authorization code into a credentials object
         oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
@@ -59,6 +58,7 @@ def gconnect():
             json.dumps('Failed to upgrade the authorization code.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
+
 
     # Check that the access token is valid.
     access_token = credentials.access_token
@@ -76,7 +76,7 @@ def gconnect():
     gplus_id = credentials.id_token['sub']
     if result['user_id'] != gplus_id:
         response = make_response(
-            json.dumps("Token's user ID doesn't match given user ID."), 401)
+        json.dumps("Token's user ID doesn't match given user ID."), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -118,7 +118,7 @@ def gconnect():
     output += '<img src="'
     output += login_session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
-    flash("you are now logged in as %s" % login_session['username'])
+
     print "done!"
     return output
 
@@ -235,3 +235,10 @@ def server_error(e):
     # Log the error and stacktrace.
     logging.exception('An error occurred during a request.')
     return 'An internal error occurred.', 500
+
+"""
+"auth_uri":"https://accounts.google.com/o/oauth2/auth",
+"token_uri":"https://accounts.google.com/o/oauth2/token",
+"auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+
+"""
