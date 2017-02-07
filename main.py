@@ -4,7 +4,8 @@ from google.appengine.ext import db
 from flask import Flask, render_template, request, redirect, url_for
 
 from flask import session as login_session
-import random, string
+import random
+import string
 
 # Create a flow object
 from oauth2client.client import flow_from_clientsecrets
@@ -26,7 +27,7 @@ app.secret_key = 'super_secret_key'
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
-APPLICATION_NAME = "Flash Card App"
+
 
 
 # Create  anti forgery state token
