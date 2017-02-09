@@ -2,23 +2,23 @@ import logging
 
 from google.appengine.ext import db
 from flask import Flask, render_template, request, redirect, url_for
-
 from flask import session as login_session
+
 import random
 import string
 
-# Create a flow object
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+# Create a service object
+from apiclient import discovery
+
 
 # HTTP client library
 import httplib2
 # Provide an API for converting in memory python object to serialize representation
 import json
 
-from flask import make_response
-import requests
-
+# Models
 from models.Course import Course
 from models.Card import Card
 
@@ -51,9 +51,9 @@ def gconnect():
     code = request.data
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
-        oauth_flow.redirect_uri = 'postmessage'
-        credentials = oauth_flow.step2_exchange(code)
+        flow = flow_from_clientsecrets('client_secrets.json', scope='')
+        flow.redirect_uri = 'postmessage'
+        credentials = flow.step2_exchange(code)
     except FlowExchangeError:
         response = make_response(
             json.dumps('Failed to upgrade the authorization code.'), 401)
@@ -102,6 +102,7 @@ def gconnect():
     login_session['gplus_id'] = gplus_id
 
     # Get user info
+
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
@@ -236,10 +237,3 @@ def server_error(e):
     # Log the error and stacktrace.
     logging.exception('An error occurred during a request.')
     return 'An internal error occurred.', 500
-
-"""
-"auth_uri":"https://accounts.google.com/o/oauth2/auth",
-"token_uri":"https://accounts.google.com/o/oauth2/token",
-"auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
-
-"""
