@@ -1,25 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+
+  <meta name="google-signin-client_id" content="357976897055-e0jom03ucjo0n47eqh4i0sgj5g12i32o.apps.googleusercontent.com">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
 <!-- GOOGLE PLUS SIGN IN BUTTON-->
-    <div id="signInButton">
-        <span class="g-signin"
-        data-scope="openid email"
-        data-clientid="357976897055-e0jom03ucjo0n47eqh4i0sgj5g12i32o.apps.googleusercontent.com"
-        data-redirecturi="postmessage"
-        data-accesstype="offline"
-        data-cookiepolicy="single_host_origin"
-        data-callback="signInCallback"
-        data-approvalprompt="force">
-        </span>
-    </div>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <a href="#" onclick="signOut();">Sign out</a>
     <div id="result"></div>
+
 <script>
+  function onSignIn(googleUser) { 
+    var profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+  }
+
+
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+
+
+
+
+
+    /****************************** Udacity code ********************************
     function signInCallback(authResult) {
       if (authResult['code']) {
       // Hide the sign-in button now that the user is authorized
@@ -47,6 +62,7 @@
       }
 
   }); } }
+    ****************************************************************************/
 </script>
 </body>
 </html>
