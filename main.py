@@ -27,7 +27,7 @@ app.secret_key = 'super_secret_key'
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
-
+APPLICATION_NAME = "flashCardApp"
 
 
 # Create  anti forgery state token
